@@ -21,8 +21,8 @@ The following elements are valid in the rules of this module:
  - `subject`: subject to set in metric for `rewrite subject` action
  - `limit`: the action is applied only if the expression result is greater than this value (default: 0)
  - `least`: if true, the forced action is a minimum: Rspamd applies it unless the score-based action is stronger, and the remaining checks still run
-- `process_all`: if true, Rspamd still runs the remaining checks after the rule sets the action (by default they are skipped)
-- `priority`: passthrough priority used to arbitrate between multiple matching rules (default: `normal`); accepts `low`, `normal`, `high`, `critical`, or the equivalent numeric values `0`-`3`
+ - `process_all`: if true, Rspamd still runs the remaining checks after the rule sets the action (by default they are skipped)
+ - `priority`: passthrough priority used to arbitrate between multiple matching rules (default: `normal`); accepts `low`, `normal`, `high`, `critical`, or the equivalent numeric values `0`-`3`
 
 Only one of `honor_action` or `require_action` should be set on a given rule.
 
