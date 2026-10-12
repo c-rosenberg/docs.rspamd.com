@@ -36,7 +36,7 @@ Each rule named `MY_RULE` produces a registered symbol called `FORCE_ACTION_MY_R
 
 ### Execution Order
 
-If neither `require_action` nor `honor_action` is specified and `expression` does not reference a [composite](/configuration/composites#composite-expressions), the respective force action symbol is registered as a normal filter with a dependency on all symbols referenced in `expression`.
+If neither `require_action` nor `honor_action` is specified and `expression` does not reference a [composite](/configuration/composites#expression-syntax), the respective force action symbol is registered as a normal filter with a dependency on all symbols referenced in `expression`.
 If at least one of `require_action` or `honor_action` is specified, or `expression` references a composite, the respective force action symbol is registered as a post filter.
 For example, this is important if you want to revert an action that is decided upon the total score, as the action is only updated once all normal filters are completed.
 
@@ -46,7 +46,7 @@ Composites are only resolved after normal filters have run, so a rule cannot dep
 
 When more than one rule matches for the same message, `priority` decides which one wins: the highest-priority match is applied regardless of registration order. Available priorities, from lowest to highest, are `low` (`0`), `normal` (`1`), `high` (`2`) and `critical` (`3`). Rules without an explicit `priority` default to `normal`.
 
-An invalid `priority` (not one of the named values or a number, a fractional value, a value outside `0`-`3`, or `NaN`) is logged as a warning and the rule falls back to the default priority. Setting `priority` together with `least` also logs a warning, since a `least` rule can never outrank a non-`least` result — `priority` then only affects ordering among other `least` rules.
+An invalid priority is logged as a warning and ignored, so the rule uses the default priority. A fractional value is rounded down and a value outside `0`-`3` is clamped to the nearest bound, both with a warning. Setting `priority` together with `least` also logs a warning, since a `least` rule can never outrank a non-`least` result — `priority` then only affects ordering among other `least` rules.
 
 When a rule with an explicit `priority` fires, its `FORCE_ACTION_*` symbol carries a `priority:N` option (alongside the forced action name) so the value is visible in the scan output rather than only in the passthrough result.
 
@@ -64,7 +64,7 @@ messages {
 }
 ~~~
 
-When Rspamd detects this layout (`opts.actions` present) it logs "Processing legacy config" and registers symbols automatically. Symbol names in legacy mode are derived from a hash of the expression (`FORCE_ACTION_` followed by 12 hex characters) rather than a human-readable rule name. Migrate to the `rules {}` format to get stable, human-readable symbol names.
+When Rspamd detects this layout (`opts.actions` present) it logs "Processing legacy config" and registers symbols automatically. Symbol names in legacy mode are derived from a hash of the expression (`FORCE_ACTION_` followed by 12 hex characters) rather than a human-readable rule name. Migrate to the `rules {}` format to get stable, human-readable symbol names and the `priority` option, which is not available in legacy mode.
 
 ### Examples
 
